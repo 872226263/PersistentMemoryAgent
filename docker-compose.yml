@@ -1,0 +1,54 @@
+version: '3.8'
+
+# 定义项目名称，与PP中her-system保持一致
+name: her-system
+
+networks:
+  her_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local # 或者直接留空，默认为 local
+  qdrant_data:
+    driver: local # 或者直接留空，默认为 local
+
+services:
+  postgres-db:
+    image: postgres:15-alpine # 使用一个具体的、较新的稳定版 Alpine 镜像以减小体积
+    container_name: postgres-db
+    restart: unless-stopped
+    environment:
+      # 这些环境变量将用于初始化PostgreSQL数据库
+      # 建议通过 .env 文件进行配置，以保证安全性与灵活性
+      POSTGRES_USER: ${POSTGRES_USER:-her_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-her_secret_password}
+      POSTGRES_DB: ${POSTGRES_DB:-her_memory_db}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # 持久化存储PostgreSQL数据
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432" # 将容器的5432端口映射到主机的指定端口 (默认为5432)
+    networks:
+      - her_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  qdrant-db:
+    image: qdrant/qdrant:v1.8.2 # 使用与 qdrant-client 版本兼容的 Qdrant 服务版本
+    container_name: qdrant-db
+    restart: unless-stopped
+    volumes:
+      - qdrant_data:/qdrant/storage # 持久化存储Qdrant数据
+    ports:
+      - "${QDRANT_HTTP_PORT:-6333}:6333" # Qdrant HTTP API 端口
+      - "${QDRANT_GRPC_PORT:-6334}:6334" # Qdrant gRPC API 端口
+    networks:
+      - her_network
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:6333/dashboard"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
