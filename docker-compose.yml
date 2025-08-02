@@ -1,10 +1,10 @@
 version: '3.8'
 
-# 定义项目名称，与PP中her-system保持一致
-name: her-system
+# 定义项目名称，与PP中persistent-memory-agent-system保持一致
+name: persistent-memory-agent-system
 
 networks:
-  her_network:
+  persistent_memory_agent_network:
     driver: bridge
 
 volumes:
@@ -21,15 +21,15 @@ services:
     environment:
       # 这些环境变量将用于初始化PostgreSQL数据库
       # 建议通过 .env 文件进行配置，以保证安全性与灵活性
-      POSTGRES_USER: ${POSTGRES_USER:-her_user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-her_secret_password}
-      POSTGRES_DB: ${POSTGRES_DB:-her_memory_db}
+      POSTGRES_USER: ${POSTGRES_USER:-persistent_memory_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-persistent_memory_secret_password}
+      POSTGRES_DB: ${POSTGRES_DB:-persistent_memory_db}
     volumes:
       - postgres_data:/var/lib/postgresql/data # 持久化存储PostgreSQL数据
     ports:
       - "${POSTGRES_PORT:-5432}:5432" # 将容器的5432端口映射到主机的指定端口 (默认为5432)
     networks:
-      - her_network
+      - persistent_memory_agent_network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 10s
@@ -46,7 +46,7 @@ services:
       - "${QDRANT_HTTP_PORT:-6333}:6333" # Qdrant HTTP API 端口
       - "${QDRANT_GRPC_PORT:-6334}:6334" # Qdrant gRPC API 端口
     networks:
-      - her_network
+      - persistent_memory_agent_network
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://localhost:6333/dashboard"]
       interval: 10s

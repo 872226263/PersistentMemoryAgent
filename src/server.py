@@ -18,7 +18,7 @@ import uvicorn
 
 # --- FastAPI App Initialization ---
 app = FastAPI(
-    title="H.E.R. - Dynamic Memory Forest API",
+    title="PersistentMemoryAgent - Dynamic Memory Forest API",
     version="3.0"
 )
 
@@ -115,5 +115,5 @@ async def explore_memory_node(
 
 if __name__ == "__main__":
     logger.add("logs/server.log", rotation="10 MB", level="INFO")
-    logger.info("启动 H.E.R. API 服务器...")
+    logger.info("启动 PersistentMemoryAgent API 服务器...")
     uvicorn.run(app, host="0.0.0.0", port=8000)  

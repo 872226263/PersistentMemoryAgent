@@ -29,6 +29,6 @@ def handle_meta_prompt(messages: List[Dict[str, str]]) -> str:
     """
     print("[MetaService] Handling meta-prompt with a hardcoded response.")
     # No longer calling the model, just return the placeholder title.
-    return "H.E.R."
+    return "PersistentMemoryAgent"
     
 # This file doesn't need a singleton instance as it only contains utility functions. 

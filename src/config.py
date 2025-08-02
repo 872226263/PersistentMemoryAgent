@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     # --- LLM 提供商配置 ---
     CHAT_MODEL_PROVIDER: str = "gemini"
     CHAT_MODEL_NAME: str = "gemini-2.5-flash-preview-05-20"
-    SYSTEM_PROMPT: str = "You are H.E.R., your primary objective is to meticulously understand and strictly adhere to every instruction I provide. Pay close attention to all details I give, ensuring your response perfectly aligns with my requirements. Prioritize my specific directives, even if it means overriding your typical response patterns or general knowledge."
+    SYSTEM_PROMPT: str = "You are PersistentMemoryAgent, your primary objective is to meticulously understand and strictly adhere to every instruction I provide. Pay close attention to all details I give, ensuring your response perfectly aligns with my requirements. Prioritize my specific directives, even if it means overriding your typical response patterns or general knowledge."
     GOOGLE_API_KEY: str = "YOUR_GOOGLE_API_KEY_HERE"
 
     SUMMARY_MODEL_PROVIDER: str = "volcangine"
@@ -33,15 +33,15 @@ class Settings(BaseSettings):
     QDRANT_PORT: int = 6333
     
     # 统一的 Qdrant 集合名称，用于存储所有 memory_nodes 的向量
-    NODES_VECTOR_COLLECTION_NAME: str = "her_memory_nodes" # 新名称，替换旧的两个
+    NODES_VECTOR_COLLECTION_NAME: str = "persistent_memory_nodes" # 新名称，替换旧的两个
 
     # --- PostgreSQL 数据库配置 ---
     # DB_PATH: str = "memory.db" # 如果使用 PostgreSQL 存储主要元数据，则不再相关
     POSTGRES_HOST: str = "localhost"
     POSTGRES_PORT: int = 5432
-    POSTGRES_USER: str = "her_user"
-    POSTGRES_PASSWORD: str = "her_password"
-    POSTGRES_DB: str = "her_memory_db"
+    POSTGRES_USER: str = "persistent_memory_user"
+    POSTGRES_PASSWORD: str = "persistent_memory_password"
+    POSTGRES_DB: str = "persistent_memory_db"
     
     # --- 向量维度 (TODO: 理想情况下从模型获取，但对于 init_db 可以在此处设置) ---
     VECTOR_DIMENSION: int = 1024 # 如果你的嵌入模型有不同的维度，请调整
